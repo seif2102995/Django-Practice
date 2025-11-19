@@ -13,7 +13,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
             'last_name', 
             'email', 
             'position',
-            'hire_date',
+            
             'tasks_count',  # Custom field we added
             'created_at',
             'updated_at'
