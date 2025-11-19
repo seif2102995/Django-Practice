@@ -32,7 +32,7 @@ class Task(models.Model):
     assigned_to = models.ForeignKey(
         'Employee',
         on_delete=models.CASCADE,
-        related_name='tasks', # instead of task_set (emp.task_set)->(emp.tasks)
+        related_name='tasks', # instead of task_set (emp.task_set)->(emp.tasks) .......... how the other model refers back to this one. emp->tasks
         null=True,
         blank=True,
     ) # null -> DB level ..... blank ->app level (form validation)
