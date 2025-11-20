@@ -8,7 +8,7 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     position = models.CharField(max_length=100)
-    
+ 
     
     # Metadata
     created_at = models.DateTimeField(auto_now_add=True) #1st creation only and never changes
@@ -21,6 +21,7 @@ class Employee(models.Model):
     # gives options 
     class Meta:
         ordering = ['-created_at']  
+       
         
 
 class Task(models.Model):

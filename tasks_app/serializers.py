@@ -14,13 +14,13 @@ class EmployeeSerializer(serializers.ModelSerializer):
             'email', 
             'position',
             
-            'tasks_count',  # Custom field we added
+            'tasks_count',  
             'created_at',
             'updated_at'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
     
-    def get_tasks_count(self, obj):
+    def get_tasks_count(self, obj): #obj=emp
         
         return obj.tasks.count()  
     
