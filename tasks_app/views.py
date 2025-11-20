@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from .models import Employee, Task
 from .serializers import EmployeeSerializer, TaskSerializer
 from django_filters.rest_framework import DjangoFilterBackend
+from django.http import HttpResponse
+import csv
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
@@ -19,10 +21,54 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     # Enable filtering capabilities for this API
     filter_backends = [filters.SearchFilter]  
     
-    # Fields that can be searched using ?search=query parameter
-    search_fields = ['first_name', 'last_name']
-
     
+    @action(detail=False, methods=['get'])
+    def export_csv(self, request):
+        """
+        Custom API endpoint to export employees as CSV
+        URL: /api/employees/export_csv/
+        Method: GET
+        """
+        # Get filtered queryset based on search parameters
+        queryset = self.filter_queryset(self.get_queryset())
+        
+        # Create CSV response
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="employees.csv"'
+        
+        # Create CSV writer
+        writer = csv.writer(response)
+        
+        # Write header row
+        writer.writerow([
+            'ID', 
+            'First Name', 
+            'Last Name', 
+            'Email', 
+            'Position',
+            'Tasks Count',
+            'Created At',
+            'Updated At'
+        ])
+        
+        # Write data rows
+        for employee in queryset:
+            writer.writerow([
+                employee.id,
+                employee.first_name,
+                employee.last_name,
+                employee.email,
+                employee.position,
+                employee.tasks.count(),
+                employee.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                employee.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+            ])
+        
+        return response
+    
+   
+
+    # Fields that can be searched using ?search=query parameter
     # # Fields that can be used for sorting with ?ordering=field_name
     # ordering_fields = ['first_name', 'last_name', 'created_at']
     
