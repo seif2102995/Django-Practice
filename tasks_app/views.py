@@ -2,6 +2,7 @@
 from rest_framework import viewsets, status, filters  # Import filters from rest_framework
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Employee, Task
 from .serializers import EmployeeSerializer, TaskSerializer
 from django_filters.rest_framework import DjangoFilterBackend
@@ -15,7 +16,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     
     queryset = Employee.objects.all()
     
-    
+    permission_classes = [IsAuthenticated]
     serializer_class = EmployeeSerializer
     
     # Enable filtering capabilities for this API
@@ -84,6 +85,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     
     # Specifies how to convert Task objects to/from JSON
     serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
     
     # Enable filtering capabilities for this API
     filter_backends = [DjangoFilterBackend]
